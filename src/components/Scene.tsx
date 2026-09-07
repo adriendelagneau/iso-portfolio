@@ -4,7 +4,7 @@ import { OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { CameraGUI } from "@/components/CameraGUI";
+// import { CameraGUI } from "@/components/CameraGUI"; // lil-gui camera debug panel, disabled
 import { CameraManager } from "@/components/CameraManager";
 import { FloorGrid } from "@/components/FloorGrid";
 import { HitBoxes } from "@/components/HitBoxes";
@@ -51,7 +51,7 @@ export default function Scene() {
         far={1000}
       />
       <CameraManager camera={cameraRef} />
-      <CameraGUI camera={cameraRef} />
+      {/* <CameraGUI camera={cameraRef} /> */}
       <InteractionHandler />
       {/* <ambientLight intensity={0.6} /> */}
       {/* <directionalLight position={[5, 8, 4]} intensity={1.2} castShadow /> */}
