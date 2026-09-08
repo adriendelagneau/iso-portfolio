@@ -315,7 +315,7 @@ export const interactiveObjects: InteractiveObject[] = [
       mobile: { position: [4, 9.8, 4.8618], eulerDeg: [-1.8, 1.15, 0.36], zoom: 106.5 },
     }),
     title: "Particules",
-    text: "Une expérimentation de particules en morphing, réalisée avec Three.js et du GLSL sur-mesure — utilisez les boutons ci-dessous pour basculer entre les formes. Texte provisoire — à détailler.",
+    text: "Une expérimentation de particules en morphing, réalisée avec Three.js et du GLSL sur-mesure — utilisez les boutons ci-dessous pour basculer entre les formes.",
   },
   {
     name: "Contact",

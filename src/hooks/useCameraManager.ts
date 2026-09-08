@@ -30,8 +30,10 @@ export function useCameraManager({
   // Stable proxy object driving the quaternion slerp tween below — must
   // persist across effect re-runs (unlike a fresh {t: 0} literal each time)
   // so gsap.killTweensOf can find and interrupt an in-flight one when the
-  // user switches views again before it finishes.
-  const quaternionProgress = useRef({ t: 0 }).current;
+  // user switches views again before it finishes. Kept as the ref itself
+  // (not .current, read only inside the effect below) — refs can't be
+  // accessed during render.
+  const quaternionProgressRef = useRef({ t: 0 });
 
   const getTransformForDevice = useCallback(
     (name: string) => {
@@ -63,6 +65,7 @@ export function useCameraManager({
     const cam = camera.current;
     if (!cam) return;
 
+    const quaternionProgress = quaternionProgressRef.current;
     const duration = CAMERA_TRANSITION_DURATION;
     const ease = "power3.inOut";
 
@@ -109,5 +112,5 @@ export function useCameraManager({
       overwrite: true,
       onUpdate: () => cam.updateProjectionMatrix(),
     });
-  }, [targetPosition, targetQuaternion, zoom, camera, quaternionProgress]);
+  }, [targetPosition, targetQuaternion, zoom, camera]);
 }

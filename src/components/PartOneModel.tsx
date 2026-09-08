@@ -52,13 +52,16 @@ export function PartOneModel(props: JSX.IntrinsicElements["group"]) {
   // self-hosted decoder in public/draco/ (copied from
   // three/examples/jsm/libs/draco/gltf/) instead of drei's default CDN path.
   const { nodes } = useGLTF("/models/Part-1.glb", "/draco/") as unknown as GLTFResult;
-  const bakedTexture = useTexture("/textures/Part-1.jpg");
+  // Configured in useTexture's onLoad rather than mutated in useMemo below
+  // — the texture is a value returned by a hook, so setting flipY/colorSpace
+  // on it during render (even memoized) isn't allowed; onLoad fires once,
+  // right when the texture is actually ready, same effective timing.
+  const bakedTexture = useTexture("/textures/Part-1.jpg", (texture) => {
+    texture.flipY = false;
+    texture.colorSpace = THREE.SRGBColorSpace;
+  });
 
-  const bakedMaterial = useMemo(() => {
-    bakedTexture.flipY = false;
-    bakedTexture.colorSpace = THREE.SRGBColorSpace;
-    return new THREE.MeshBasicMaterial({ map: bakedTexture });
-  }, [bakedTexture]);
+  const bakedMaterial = useMemo(() => new THREE.MeshBasicMaterial({ map: bakedTexture }), [bakedTexture]);
 
   const hRef = useRef<THREE.Mesh>(null);
   const mRef = useRef<THREE.Mesh>(null);

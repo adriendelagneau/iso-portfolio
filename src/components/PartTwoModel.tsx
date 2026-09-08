@@ -105,13 +105,15 @@ export function PartTwoModel(props: JSX.IntrinsicElements["group"]) {
   // Part-2.glb is Draco-compressed — see PartOneModel.tsx's useGLTF call for
   // why the second arg points at the self-hosted decoder in public/draco/.
   const { nodes } = useGLTF("/models/Part-2.glb", "/draco/") as unknown as GLTFResult;
-  const bakedTexture = useTexture("/textures/Part-2.jpg");
+  // Configured in useTexture's onLoad, same as the array call below — not
+  // mutated in useMemo, since a value returned by a hook can't be modified
+  // during render even when memoized.
+  const bakedTexture = useTexture("/textures/Part-2.jpg", (texture) => {
+    texture.flipY = false;
+    texture.colorSpace = THREE.SRGBColorSpace;
+  });
 
-  const bakedMaterial = useMemo(() => {
-    bakedTexture.flipY = false;
-    bakedTexture.colorSpace = THREE.SRGBColorSpace;
-    return new THREE.MeshBasicMaterial({ map: bakedTexture });
-  }, [bakedTexture]);
+  const bakedMaterial = useMemo(() => new THREE.MeshBasicMaterial({ map: bakedTexture }), [bakedTexture]);
 
   const [cocktailTexture, colaTexture, journalTexture, lbcTexture, nsfwTexture] = useTexture(
     [
