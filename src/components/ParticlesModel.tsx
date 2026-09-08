@@ -9,17 +9,47 @@ import { CAMERA_TRANSITION_DURATION } from "@/hooks/useCameraManager";
 import useInteractionStore from "@/store/useInteractionStore";
 import { useMorphStore } from "@/store/useMorphStore";
 
-// Ported from room4's src/components/MorphParticles.tsx, adapted to this
-// project's Particules.glb node names (three-js / suzanne001). Morph target
-// is driven by useMorphStore (set via the two buttons in the Particles
-// sidebar panel, isoroom-v3-style), not a click on the particles
-// themselves. Particules.glb also contains a third node, Cube001, sitting
-// far from the other two (~[1.8, 1.0, 1.7] vs ~[3.9, 10.4, -4.8]) — it's
-// excluded here, kept as a simple two-shape toggle like room4.
+// Ported from room4's src/components/MorphParticles.tsx, then generalized:
+// every mesh node in Particules.glb becomes a morph target, in whatever
+// order GLTFLoader exposes them (Blender's own object order, stable across
+// re-exports of the same file but not guaranteed to match Blender's outliner
+// if objects are reordered) — so shapes can be added/removed/swapped by
+// re-exporting the .glb alone, no code changes required. Non-mesh nodes
+// (empties, cameras) are skipped automatically since they have no geometry.
+// Morph target is driven by useMorphStore (set via the sidebar panel's
+// buttons, one per shape — see shapeNames below), not a click on the
+// particles themselves.
 // Each shape's own node transform (position/quaternion/scale, as loaded by
 // GLTFLoader) is applied per-vertex when building the morph target buffers
 // below, so this stays correct regardless of whether a given re-export
 // bakes transforms into geometry or keeps them on the node.
+
+// Blender's own glTF export node order isn't reliably controllable from the
+// Outliner (drag-reordering there doesn't affect it), so a leading
+// "<number>_" or "<number>-" on the Blender object name (e.g. "1_three-js",
+// "2_suzanne") is the one lever available to fix the sidebar button order —
+// see sortKey below. Unprefixed names keep their original export-order
+// relative position, sorted after any prefixed ones.
+const SORT_PREFIX_RE = /^(\d+)[-_]+/;
+
+function sortKey(name: string): number {
+  const match = name.match(SORT_PREFIX_RE);
+  return match ? Number(match[1]) : Infinity;
+}
+
+// "three-js" -> "Three Js", "suzanne001" -> "Suzanne001" — a generic
+// fallback label since we no longer hand-write one per shape. Strips the
+// sort prefix (if any) so it doesn't leak into the button text. Deliberately
+// doesn't strip trailing digits: Blender auto-names duplicated objects
+// "shape.001", "shape.002", etc., and collapsing those to the same label
+// would make sidebar buttons indistinguishable.
+function prettifyShapeName(name: string): string {
+  return name
+    .replace(SORT_PREFIX_RE, "")
+    .replace(/[_-]+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 const vertexShader = /* glsl */ `
 // Simplex 3D Noise
@@ -150,10 +180,7 @@ void main()
 `;
 
 type GLTFResult = {
-  nodes: {
-    ["three-js"]: THREE.Mesh;
-    suzanne001: THREE.Mesh;
-  };
+  nodes: Record<string, THREE.Object3D>;
 };
 
 const MorphParticlesMaterial = shaderMaterial(
@@ -196,10 +223,18 @@ export function ParticlesModel(props: JSX.IntrinsicElements["group"]) {
   const targetIndex = useMorphStore((s) => s.targetIndex);
   const isAnimating = useMorphStore((s) => s.isAnimating);
   const setIsAnimating = useMorphStore((s) => s.setIsAnimating);
+  const setShapeNames = useMorphStore((s) => s.setShapeNames);
 
   const geometryData = useMemo(() => {
-    // Fixed order: index 0 = threejs text, index 1 = suzanne monkey.
-    const meshes = [nodes["three-js"], nodes.suzanne001];
+    // Every mesh node in the file becomes a shape — see the comment above
+    // for why nothing here is hardcoded to specific names or a count.
+    // Sorted by sortKey (numeric name prefix), not left in GLTFLoader's raw
+    // export order.
+    const meshEntries = Object.entries(nodes)
+      .filter((entry): entry is [string, THREE.Mesh] => (entry[1] as THREE.Mesh).isMesh === true)
+      .sort(([a], [b]) => sortKey(a) - sortKey(b));
+    const meshes = meshEntries.map(([, mesh]) => mesh);
+    const shapeNames = meshEntries.map(([name]) => prettifyShapeName(name));
 
     const maxCount = Math.max(
       ...meshes.map((m) => (m.geometry.attributes.position as THREE.BufferAttribute).count),
@@ -241,11 +276,18 @@ export function ParticlesModel(props: JSX.IntrinsicElements["group"]) {
     );
 
     geo.setAttribute("position", positions[0]);
-    geo.setAttribute("aPositionTarget", positions[1]);
+    // Falls back to positions[0] for a hypothetical single-shape file —
+    // doesn't matter which target is wired up before the first morph()
+    // call, since uProgress starts at 0 and only "position" is read then.
+    geo.setAttribute("aPositionTarget", positions[Math.min(1, positions.length - 1)]);
     geo.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
 
-    return { geo, positions };
+    return { geo, positions, shapeNames };
   }, [nodes]);
+
+  useEffect(() => {
+    setShapeNames(geometryData.shapeNames);
+  }, [geometryData.shapeNames, setShapeNames]);
 
   useEffect(() => {
     positionsRef.current = geometryData.positions;

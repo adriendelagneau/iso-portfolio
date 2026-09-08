@@ -7,16 +7,18 @@ import { SidebarPanel } from "./SidebarPanel";
 
 export function SidebarParticles({ object }: { object: InteractiveObject }) {
   const setTargetIndex = useMorphStore((s) => s.setTargetIndex);
+  // Populated by ParticlesModel from whatever shapes Particules.glb
+  // actually contains — see useMorphStore.
+  const shapeNames = useMorphStore((s) => s.shapeNames);
 
   return (
     <SidebarPanel object={object}>
-      <div className="content-block flex gap-2 pt-2">
-        <Button className="action-item" onClick={() => setTargetIndex(0)}>
-          Three.js
-        </Button>
-        <Button className="action-item" onClick={() => setTargetIndex(1)}>
-          Suzanne
-        </Button>
+      <div className="content-block flex flex-wrap gap-2 pt-2">
+        {shapeNames.map((name, index) => (
+          <Button key={`${name}-${index}`} className="action-item" onClick={() => setTargetIndex(index)}>
+            {name}
+          </Button>
+        ))}
       </div>
     </SidebarPanel>
   );

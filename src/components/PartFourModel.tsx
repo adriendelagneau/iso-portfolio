@@ -44,13 +44,12 @@ type GLTFResult = GLTF & {
 // except the 5 photos (real website screenshots) and the clock hands (real time).
 export function PartFourModel(props: JSX.IntrinsicElements["group"]) {
   const { nodes } = useGLTF("/models/Part-4.glb") as unknown as GLTFResult;
-  const bakedTexture = useTexture("/textures/Part-4.png");
+  const bakedTexture = useTexture("/textures/Part-4.png", (texture) => {
+    texture.flipY = false;
+    texture.colorSpace = THREE.SRGBColorSpace;
+  });
 
-  const bakedMaterial = useMemo(() => {
-    bakedTexture.flipY = false;
-    bakedTexture.colorSpace = THREE.SRGBColorSpace;
-    return new THREE.MeshBasicMaterial({ map: bakedTexture });
-  }, [bakedTexture]);
+  const bakedMaterial = useMemo(() => new THREE.MeshBasicMaterial({ map: bakedTexture }), [bakedTexture]);
 
   const [cocktailTexture, colaTexture, journalTexture, lbcTexture, nsfwTexture] = useTexture(
     [

@@ -27,13 +27,12 @@ import { useResponsiveStore } from "@/store/useResponsiveStore";
 // Sized off useResponsiveStore's own mobile/tablet/desktop split, same
 // pattern as NavPad/Sidebar/SidebarPanel — mobile gets a smaller card
 // (was overflowing small viewports), tablet/desktop keep the original
-// 180x100 size. lineHeight is the rolling text window's height (one row);
-// cardOffset is the frame's vertical nudge (was a literal -30px, tied to
-// the old fixed height).
+// 180x100 size. cardOffset is the frame's vertical nudge (was a literal
+// -30px, tied to the old fixed height).
 const SIZES = {
-  mobile: { width: 130, height: 68, cardOffset: -20, textSize: "text-lg", lineHeight: 24 },
-  tablet: { width: 180, height: 100, cardOffset: -30, textSize: "text-2xl", lineHeight: 32 },
-  desktop: { width: 180, height: 100, cardOffset: -30, textSize: "text-2xl", lineHeight: 32 },
+  mobile: { width: 160, height: 68, cardOffset: -20, textSize: "text-2xl" },
+  tablet: { width: 210, height: 100, cardOffset: -30, textSize: "text-[33px]" },
+  desktop: { width: 210, height: 100, cardOffset: -30, textSize: "text-[33px]" },
 };
 
 const ROLL_DEPTH = 12; // px the label recedes (translateZ) at the midpoint of the roll
@@ -144,7 +143,7 @@ export function Loader() {
 
   if (isDone) return null;
 
-  const { width, height, cardOffset, textSize, lineHeight } = isMobile
+  const { width, height, cardOffset, textSize } = isMobile
     ? SIZES.mobile
     : isTablet
       ? SIZES.tablet
@@ -212,12 +211,12 @@ export function Loader() {
             </svg>
           )}
 
-          <div className={`relative overflow-hidden ${textSize}`} style={{ width: "100%", height: lineHeight }}>
-            <div ref={rollRef} className="absolute inset-x-0 top-0">
-              <div className="flex items-center justify-center" style={{ height: lineHeight }}>
+          <div className={`relative min-w-0 overflow-hidden ${textSize}`} style={{ width: "100%", height: "100%" }}>
+            <div ref={rollRef} className="absolute inset-x-0 top-0" style={{ height: "200%" }}>
+              <div className="flex items-center justify-center whitespace-nowrap" style={{ height: "50%" }}>
                 Chargement
               </div>
-              <div className="flex items-center justify-center" style={{ height: lineHeight }}>
+              <div className="flex items-center justify-center whitespace-nowrap" style={{ height: "50%" }}>
                 Entrer
               </div>
             </div>

@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored third-party scripts (Draco decoder, self-hosted for
+    // useGLTF's dracoLoader path) — minified, not authored source.
+    "public/**",
   ]),
 ]);
 

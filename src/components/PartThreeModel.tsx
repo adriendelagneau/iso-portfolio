@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { JSX, useMemo } from "react";
+import { JSX, useLayoutEffect, useMemo } from "react";
 import { useGLTF, useTexture, useVideoTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { CoffeeSmoke } from "@/components/CoffeeSmoke";
@@ -85,30 +85,44 @@ type GLTFResult = GLTF & {
 // This model ships with no embedded materials/textures — geometry only.
 // Lighting is pre-baked into /textures/Part-3.jpg (mapped via each mesh's UV0),
 // so a single unlit material is shared across every mesh except the screens,
-// which get a live video texture instead (laptop-screen001, screen-1, screen-2).
+// which each get their own live video texture instead (laptop-screen001,
+// screen-1, screen-2).
 // The desk's loudspeakers were removed in this export, and the old
 // "Circle_Rug001" mesh was renamed to "Mouse_carpet". A later re-export added
 // a "coffe" mesh (the coffee liquid disc inside the mug, sibling of
 // Object001 in the same group) and removed the separate "Bulb" mesh from the
 // lamp group.
+function useScreenMaterial(videoUrl: string) {
+  // useVideoTexture (unlike useTexture below) has no onLoad param to
+  // configure flipY/colorSpace at construction time, and the plugin flags
+  // mutating a hook's return value even from inside an effect — there's no
+  // rule-compliant way to configure a VideoTexture with this API, so this
+  // is a deliberate, scoped exception rather than fighting an unwinnable
+  // battle. Still moved out of useMemo into a layout effect (runs once per
+  // texture instance, before paint) instead of mutating during render.
+  const videoTexture = useVideoTexture(videoUrl);
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability -- see comment above
+    videoTexture.flipY = false;
+    videoTexture.colorSpace = THREE.SRGBColorSpace;
+  }, [videoTexture]);
+  return useMemo(() => new THREE.MeshBasicMaterial({ map: videoTexture }), [videoTexture]);
+}
+
 export function PartThreeModel(props: JSX.IntrinsicElements["group"]) {
   // Part-3.glb is Draco-compressed — see PartOneModel.tsx's useGLTF call for
   // why the second arg points at the self-hosted decoder in public/draco/.
   const { nodes } = useGLTF("/models/Part-3.glb", "/draco/") as unknown as GLTFResult;
-  const bakedTexture = useTexture("/textures/Part-3.jpg");
-  const videoTexture = useVideoTexture("/videos/dev-1.webm");
+  const bakedTexture = useTexture("/textures/Part-3.jpg", (texture) => {
+    texture.flipY = false;
+    texture.colorSpace = THREE.SRGBColorSpace;
+  });
 
-  const bakedMaterial = useMemo(() => {
-    bakedTexture.flipY = false;
-    bakedTexture.colorSpace = THREE.SRGBColorSpace;
-    return new THREE.MeshBasicMaterial({ map: bakedTexture });
-  }, [bakedTexture]);
+  const bakedMaterial = useMemo(() => new THREE.MeshBasicMaterial({ map: bakedTexture }), [bakedTexture]);
 
-  const screenMaterial = useMemo(() => {
-    videoTexture.flipY = false;
-    videoTexture.colorSpace = THREE.SRGBColorSpace;
-    return new THREE.MeshBasicMaterial({ map: videoTexture });
-  }, [videoTexture]);
+  const laptopScreenMaterial = useScreenMaterial("/videos/Screencast-blender.mp4");
+  const screen1Material = useScreenMaterial("/videos/dev-1.webm");
+  const screen2Material = useScreenMaterial("/videos/Screencast-breizh-cola.mp4");
 
   return (
     <group {...props} dispose={null}>
@@ -178,7 +192,7 @@ export function PartThreeModel(props: JSX.IntrinsicElements["group"]) {
       <group position={[5.985, 5.772, 3.675]} rotation={[0, 1.519, 0]} scale={3.318}>
         <mesh
           geometry={nodes["laptop-screen001"].geometry}
-          material={screenMaterial}
+          material={laptopScreenMaterial}
           position={[-0.35, -0.174, -0.226]}
           rotation={[0, -0.257, 0]}
           scale={1.057}
@@ -203,7 +217,7 @@ export function PartThreeModel(props: JSX.IntrinsicElements["group"]) {
             />
             <mesh
               geometry={nodes["screen-1"].geometry}
-              material={screenMaterial}
+              material={screen1Material}
               position={[-0.256, -0.046, -0.229]}
               rotation={[0, 0.321, 0]}
               scale={1.2}
@@ -223,7 +237,7 @@ export function PartThreeModel(props: JSX.IntrinsicElements["group"]) {
             />
             <mesh
               geometry={nodes["screen-2"].geometry}
-              material={screenMaterial}
+              material={screen2Material}
               position={[0.005, -0.046, -0.34]}
               rotation={[-0.001, -0.465, -0.002]}
               scale={1.2}

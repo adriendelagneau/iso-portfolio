@@ -196,12 +196,19 @@ export function FloorGrid() {
   // ray on every move (same technique drei's <Html occlude> uses) finds
   // the true nearest hit regardless of handlers, so hovering room geometry
   // that sits in front of the background plane correctly suppresses it.
-  const occluderRaycaster = useMemo(() => new Raycaster(), []);
+  // A ref, not useMemo: this instance is deliberately mutated on every
+  // pointer move (raycaster.set/.camera below) — useMemo's return value
+  // isn't allowed to be modified, but a ref's whole purpose is to hold a
+  // persistent mutable escape hatch like this. Lazy-initialized here rather
+  // than in an effect so it's ready before the very first pointer move.
+  const occluderRaycasterRef = useRef<Raycaster | null>(null);
+  if (occluderRaycasterRef.current == null) occluderRaycasterRef.current = new Raycaster();
 
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation();
     if (!outerGroupRef.current || !planeRef.current) return;
 
+    const occluderRaycaster = occluderRaycasterRef.current!;
     occluderRaycaster.set(event.ray.origin, event.ray.direction);
     // Line2/LineSegments2 (the drei <Line> highlight + debug grid) need
     // raycaster.camera set for their fat-line raycast — R3F's own shared
