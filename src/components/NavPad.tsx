@@ -42,7 +42,9 @@ export function NavPad() {
   return (
     <div
       className={`fixed bottom-4 left-4 z-50 grid ${size.gap} ${size.padding} rounded-xl border-2 border-zinc-800 bg-black/80 backdrop-blur-xl transition-opacity duration-500 ${
-        experienceStarted ? "pointer-events-auto opacity-100 delay-1000" : "pointer-events-none opacity-0"
+        experienceStarted
+          ? "pointer-events-auto opacity-100 delay-1000"
+          : "pointer-events-none opacity-0"
       }`}
       style={{
         gridTemplateAreas: `". top ." "left center right" ". bottom ."`,
@@ -62,7 +64,10 @@ export function NavPad() {
               setClickedObject(name);
             }}
           >
-            <Icon className={`text-primary ${size.icon}`} style={isActive ? { color: ACTIVE_COLOR } : undefined} />
+            <Icon
+              className={`text-primary ${size.icon}`}
+              style={isActive ? { color: ACTIVE_COLOR } : undefined}
+            />
           </div>
         );
       })}

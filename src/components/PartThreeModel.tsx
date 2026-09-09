@@ -118,7 +118,10 @@ export function PartThreeModel(props: JSX.IntrinsicElements["group"]) {
     texture.colorSpace = THREE.SRGBColorSpace;
   });
 
-  const bakedMaterial = useMemo(() => new THREE.MeshBasicMaterial({ map: bakedTexture }), [bakedTexture]);
+  const bakedMaterial = useMemo(
+    () => new THREE.MeshBasicMaterial({ map: bakedTexture }),
+    [bakedTexture],
+  );
 
   const laptopScreenMaterial = useScreenMaterial("/videos/Screencast-blender.mp4");
   const screen1Material = useScreenMaterial("/videos/dev-1.webm");
@@ -183,11 +186,31 @@ export function PartThreeModel(props: JSX.IntrinsicElements["group"]) {
         </group>
       </group>
       <group position={[4.289, 5.193, 7.59]} rotation={[0, 0.528, 0]} scale={1.977}>
-        <mesh geometry={nodes.bulb_base.geometry} material={bakedMaterial} position={[0, 0.338, 0]} />
-        <mesh geometry={nodes.lamp__shade.geometry} material={bakedMaterial} position={[0, 0.431, 0]} />
-        <mesh geometry={nodes.legs.geometry} material={bakedMaterial} position={[0.043, 0.141, 0]} />
-        <mesh geometry={nodes.round_wood.geometry} material={bakedMaterial} position={[0, 0.296, 0]} />
-        <mesh geometry={nodes.shade_frame.geometry} material={bakedMaterial} position={[0, 0.32, 0]} />
+        <mesh
+          geometry={nodes.bulb_base.geometry}
+          material={bakedMaterial}
+          position={[0, 0.338, 0]}
+        />
+        <mesh
+          geometry={nodes.lamp__shade.geometry}
+          material={bakedMaterial}
+          position={[0, 0.431, 0]}
+        />
+        <mesh
+          geometry={nodes.legs.geometry}
+          material={bakedMaterial}
+          position={[0.043, 0.141, 0]}
+        />
+        <mesh
+          geometry={nodes.round_wood.geometry}
+          material={bakedMaterial}
+          position={[0, 0.296, 0]}
+        />
+        <mesh
+          geometry={nodes.shade_frame.geometry}
+          material={bakedMaterial}
+          position={[0, 0.32, 0]}
+        />
       </group>
       <group position={[5.985, 5.772, 3.675]} rotation={[0, 1.519, 0]} scale={3.318}>
         <mesh

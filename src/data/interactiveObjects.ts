@@ -40,8 +40,10 @@ function deviceTransforms(
   desktopZoom: number,
   overrides?: { tablet?: PointDeviceOverride; mobile?: PointDeviceOverride },
 ) {
-  const tabletPoint = overrides?.tablet?.worldPoint !== undefined ? overrides.tablet.worldPoint : worldPoint;
-  const mobilePoint = overrides?.mobile?.worldPoint !== undefined ? overrides.mobile.worldPoint : worldPoint;
+  const tabletPoint =
+    overrides?.tablet?.worldPoint !== undefined ? overrides.tablet.worldPoint : worldPoint;
+  const mobilePoint =
+    overrides?.mobile?.worldPoint !== undefined ? overrides.mobile.worldPoint : worldPoint;
 
   return {
     desktop: toTransform(worldPoint, desktopZoom),
@@ -69,7 +71,12 @@ function customTransform(
   );
   return {
     targetPosition: position,
-    targetQuaternion: new THREE.Quaternion().setFromEuler(euler).toArray() as [number, number, number, number],
+    targetQuaternion: new THREE.Quaternion().setFromEuler(euler).toArray() as [
+      number,
+      number,
+      number,
+      number,
+    ],
     zoom,
   };
 }
@@ -171,7 +178,10 @@ export const introSettings: IntroSetting[] = [
   // mobile at 844x390 landscape) — position/rotation stay untouched
   // (worldPoint null -> baseFraming), since InitialView/IntroView are
   // always the fixed base isometric shot.
-  { name: "InitialView", ...deviceTransforms(null, 47, { tablet: { zoom: 40.5 }, mobile: { zoom: 20 } }) },
+  {
+    name: "InitialView",
+    ...deviceTransforms(null, 47, { tablet: { zoom: 40.5 }, mobile: { zoom: 20 } }),
+  },
 ];
 
 export interface TechItem {

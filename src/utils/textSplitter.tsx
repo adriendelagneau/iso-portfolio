@@ -9,9 +9,15 @@ export function textSplitter(text: string): React.ReactElement[] {
   const words = text.split(" ");
 
   return words.map((word, wIndex) => (
-    <span key={`word-${wIndex}`} className="word-wrapper mr-[0.25em] inline-block whitespace-nowrap">
+    <span
+      key={`word-${wIndex}`}
+      className="word-wrapper mr-[0.25em] inline-block whitespace-nowrap"
+    >
       {word.split("").map((char, cIndex) => (
-        <span key={`char-${wIndex}-${cIndex}`} className="outer-span inline-block overflow-hidden align-top">
+        <span
+          key={`char-${wIndex}-${cIndex}`}
+          className="outer-span inline-block overflow-hidden align-top"
+        >
           <span className="inner-span inline-block">{char}</span>
         </span>
       ))}
