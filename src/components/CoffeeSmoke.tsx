@@ -117,7 +117,12 @@ export function CoffeeSmoke() {
       rotation={[0, COFFEE_SMOKE_ROTATION_Y, 0]}
     >
       <planeGeometry args={[1, 1, 8, 64]} />
-      <coffeeSmokeMaterial ref={materialRef} side={THREE.DoubleSide} transparent depthWrite={false} />
+      <coffeeSmokeMaterial
+        ref={materialRef}
+        side={THREE.DoubleSide}
+        transparent
+        depthWrite={false}
+      />
     </mesh>
   );
 }

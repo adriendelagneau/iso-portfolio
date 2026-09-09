@@ -169,7 +169,7 @@ export function Loader() {
           // double up.
           className={`pointer-events-auto relative flex items-center justify-center rounded-md text-[#d8b18d] transition-colors duration-300 ${
             canEnter
-              ? "border-2 border-[#d8b18d] hover:bg-[#d8b18d] hover:text-black cursor-pointer"
+              ? "cursor-pointer border-2 border-[#d8b18d] hover:bg-[#d8b18d] hover:text-black"
               : ""
           }`}
           style={{ top: cardOffset, width, height, perspective: 600 }}
@@ -211,12 +211,21 @@ export function Loader() {
             </svg>
           )}
 
-          <div className={`relative min-w-0 overflow-hidden ${textSize}`} style={{ width: "100%", height: "100%" }}>
+          <div
+            className={`relative min-w-0 overflow-hidden ${textSize}`}
+            style={{ width: "100%", height: "100%" }}
+          >
             <div ref={rollRef} className="absolute inset-x-0 top-0" style={{ height: "200%" }}>
-              <div className="flex items-center justify-center whitespace-nowrap" style={{ height: "50%" }}>
+              <div
+                className="flex items-center justify-center whitespace-nowrap"
+                style={{ height: "50%" }}
+              >
                 Chargement
               </div>
-              <div className="flex items-center justify-center whitespace-nowrap" style={{ height: "50%" }}>
+              <div
+                className="flex items-center justify-center whitespace-nowrap"
+                style={{ height: "50%" }}
+              >
                 Entrer
               </div>
             </div>

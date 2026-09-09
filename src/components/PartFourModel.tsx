@@ -49,7 +49,10 @@ export function PartFourModel(props: JSX.IntrinsicElements["group"]) {
     texture.colorSpace = THREE.SRGBColorSpace;
   });
 
-  const bakedMaterial = useMemo(() => new THREE.MeshBasicMaterial({ map: bakedTexture }), [bakedTexture]);
+  const bakedMaterial = useMemo(
+    () => new THREE.MeshBasicMaterial({ map: bakedTexture }),
+    [bakedTexture],
+  );
 
   const [cocktailTexture, colaTexture, journalTexture, lbcTexture, nsfwTexture] = useTexture(
     [

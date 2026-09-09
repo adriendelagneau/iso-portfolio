@@ -38,7 +38,8 @@ export function useCameraManager({
   const getTransformForDevice = useCallback(
     (name: string) => {
       const source =
-        interactiveObjects.find((o) => o.name === name) ?? introSettings.find((o) => o.name === name);
+        interactiveObjects.find((o) => o.name === name) ??
+        introSettings.find((o) => o.name === name);
 
       if (!source) return null;
 
@@ -58,7 +59,11 @@ export function useCameraManager({
 
     const { targetPosition: pos, targetQuaternion: quat, zoom } = config;
 
-    setCameraTarget(new THREE.Vector3().fromArray(pos), new THREE.Quaternion().fromArray(quat), zoom);
+    setCameraTarget(
+      new THREE.Vector3().fromArray(pos),
+      new THREE.Quaternion().fromArray(quat),
+      zoom,
+    );
   }, [clickedObject, hasUserEntered, getTransformForDevice, setCameraTarget]);
 
   useEffect(() => {

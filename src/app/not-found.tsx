@@ -10,7 +10,7 @@ export default function NotFound() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
       <p className="text-sm tracking-widest text-[#d8b18d] uppercase">Erreur 404</p>
       <h1 className="text-3xl font-semibold sm:text-4xl">Cette pièce n&apos;existe pas</h1>
-      <p className="max-w-md text-foreground/70">
+      <p className="text-foreground/70 max-w-md">
         La page que tu cherches n&apos;a pas été trouvée. Retourne explorer le portfolio.
       </p>
       <Link

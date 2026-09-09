@@ -44,8 +44,14 @@ export function panFraming(
   const right = new THREE.Vector3().crossVectors(forward, WORLD_UP).normalize();
   const up = new THREE.Vector3().crossVectors(right, forward).normalize();
 
-  const position = basePosition.clone().addScaledVector(right, lateralRight).addScaledVector(up, lateralUp);
-  const target = baseTarget.clone().addScaledVector(right, lateralRight).addScaledVector(up, lateralUp);
+  const position = basePosition
+    .clone()
+    .addScaledVector(right, lateralRight)
+    .addScaledVector(up, lateralUp);
+  const target = baseTarget
+    .clone()
+    .addScaledVector(right, lateralRight)
+    .addScaledVector(up, lateralUp);
 
   const quaternion = new THREE.Quaternion().setFromRotationMatrix(
     new THREE.Matrix4().lookAt(position, target, WORLD_UP),

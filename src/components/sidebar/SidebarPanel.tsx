@@ -53,16 +53,28 @@ export function SidebarPanel({ object, children, footer }: SidebarPanelProps) {
       // before its own icons/items start (text -> icons -> text -> icons...),
       // instead of animating every letter across the whole panel first and
       // every icon after.
-      type ElementMeta = { el: HTMLElement; yOffset: number; duration: number; stagger: number; scroll: number };
+      type ElementMeta = {
+        el: HTMLElement;
+        yOffset: number;
+        duration: number;
+        stagger: number;
+        scroll: number;
+      };
       const allElements: ElementMeta[] = [];
 
       blocks.forEach((block) => {
         const letters = Array.from(block.querySelectorAll<HTMLElement>(".inner-span"));
-        const items = Array.from(block.querySelectorAll<HTMLElement>(".tech-item, .project-item, .action-item"));
+        const items = Array.from(
+          block.querySelectorAll<HTMLElement>(".tech-item, .project-item, .action-item"),
+        );
 
         // 1.2x speed over the original 0.04/0.04 (duration/stagger).
-        letters.forEach((el) => allElements.push({ el, yOffset: 6, duration: 0.033, stagger: 0.033, scroll: 24 }));
-        items.forEach((el) => allElements.push({ el, yOffset: 0, duration: 0.4, stagger: 0.15, scroll: 45.5 }));
+        letters.forEach((el) =>
+          allElements.push({ el, yOffset: 6, duration: 0.033, stagger: 0.033, scroll: 24 }),
+        );
+        items.forEach((el) =>
+          allElements.push({ el, yOffset: 0, duration: 0.4, stagger: 0.15, scroll: 45.5 }),
+        );
       });
 
       allElements.forEach(({ el }) => gsap.set(el, { opacity: 0 }));
@@ -70,7 +82,11 @@ export function SidebarPanel({ object, children, footer }: SidebarPanelProps) {
       let globalTime = 0.6;
       allElements.forEach(({ el, yOffset, duration, stagger, scroll }) => {
         tl.add(() => {
-          gsap.fromTo(el, { opacity: 0, y: yOffset }, { opacity: 1, y: 0, duration, ease: "power2.out" });
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: yOffset },
+            { opacity: 1, y: 0, duration, ease: "power2.out" },
+          );
 
           // Auto-scroll the panel to keep newly-revealed content in view.
           const rect = el.getBoundingClientRect();
@@ -115,7 +131,7 @@ export function SidebarPanel({ object, children, footer }: SidebarPanelProps) {
     <div className="flex h-full flex-col">
       <div
         ref={containerRef}
-        className="flex-1 space-y-4 overflow-hidden pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex-1 [scrollbar-width:none] space-y-4 overflow-hidden pb-4 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         <h2 className={`sidebar-title inline-block ${textSize.title} font-semibold`}>
           <span className="relative inline-block">
@@ -128,7 +144,9 @@ export function SidebarPanel({ object, children, footer }: SidebarPanelProps) {
         </h2>
 
         {object.text && (
-          <p className={`content-block ${textSize.body} leading-relaxed opacity-90`}>{textSplitter(object.text)}</p>
+          <p className={`content-block ${textSize.body} leading-relaxed opacity-90`}>
+            {textSplitter(object.text)}
+          </p>
         )}
 
         {object.blocks?.map((block, i) => {

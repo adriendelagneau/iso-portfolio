@@ -28,7 +28,11 @@ import { baseFraming } from "@/lib/cameraFraming";
 // corners onto the camera's actual right/up basis vectors. These live in
 // data/interactiveObjects.ts (BASE_POSITION/BASE_TARGET) so RoomParallax
 // shares the exact same values instead of duplicating its own copy.
-const CAMERA_POSITION: [number, number, number] = BASE_POSITION.toArray() as [number, number, number];
+const CAMERA_POSITION: [number, number, number] = BASE_POSITION.toArray() as [
+  number,
+  number,
+  number,
+];
 
 export default function Scene() {
   const cameraRef = useRef<THREE.OrthographicCamera>(null);

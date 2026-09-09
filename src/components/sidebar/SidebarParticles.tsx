@@ -15,7 +15,11 @@ export function SidebarParticles({ object }: { object: InteractiveObject }) {
     <SidebarPanel object={object}>
       <div className="content-block flex flex-wrap gap-2 pt-2">
         {shapeNames.map((name, index) => (
-          <Button key={`${name}-${index}`} className="action-item" onClick={() => setTargetIndex(index)}>
+          <Button
+            key={`${name}-${index}`}
+            className="action-item"
+            onClick={() => setTargetIndex(index)}
+          >
             {name}
           </Button>
         ))}
