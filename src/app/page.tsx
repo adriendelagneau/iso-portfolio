@@ -5,6 +5,7 @@ import { NavPad } from "@/components/NavPad";
 import { OrientationModal } from "@/components/OrientationModal";
 import { ResponsiveHandler } from "@/components/ResponsiveHandler";
 import Scene from "@/components/Scene";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <Sidebar />
       <ResponsiveHandler />
       <OrientationModal />
+      <ServiceWorkerRegistration />
     </div>
   );
 }
