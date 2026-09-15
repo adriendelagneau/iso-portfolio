@@ -9,8 +9,9 @@ import { useResponsiveStore } from "@/store/useResponsiveStore";
 const ACTIVE_COLOR = "#d8b18d";
 
 // Cross layout: one hotspot per arm, "Home" in the middle returns to
-// InitialView. Clock is reachable only by clicking the 3D clock directly
-// (matching room4), so it's omitted here.
+// InitialView. Clock was never a NavPad item (previously reachable only by
+// clicking the 3D clock directly, matching room4) and is now fully
+// neutralized as an interactive object — see HitBoxes.tsx.
 const CROSS_ITEMS: { name: string | null; Icon: LucideIcon; area: string }[] = [
   { name: "Photos", Icon: Image, area: "top" },
   { name: "Particles", Icon: Sparkles, area: "left" },
