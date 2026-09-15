@@ -46,7 +46,7 @@ export function RoomParallax({ children }: { children: ReactNode }) {
     return new THREE.Vector3().crossVectors(forward, WORLD_UP).normalize();
   }, []);
 
-  useFrame(() => {
+  useFrame(({ invalidate }) => {
     if (!groupRef.current) return;
 
     const isFocused = !!useInteractionStore.getState().clickedObject;
@@ -65,6 +65,15 @@ export function RoomParallax({ children }: { children: ReactNode }) {
     const qYaw = new THREE.Quaternion().setFromAxisAngle(WORLD_UP, yaw.current);
     const qPitch = new THREE.Quaternion().setFromAxisAngle(rightAxis, pitch.current);
     groupRef.current.quaternion.copy(qYaw.multiply(qPitch));
+
+    // Canvas runs frameloop="demand" — keep re-rendering only while the
+    // lerp hasn't visually settled yet (pointer moving or easing back to
+    // neutral on focus). An exact 0 is asymptotically unreachable, hence
+    // the epsilon; below it the remaining drift is sub-pixel.
+    const EPS = 0.0001;
+    if (Math.abs(yaw.current - targetYaw) > EPS || Math.abs(pitch.current - targetPitch) > EPS) {
+      invalidate();
+    }
   });
 
   return (

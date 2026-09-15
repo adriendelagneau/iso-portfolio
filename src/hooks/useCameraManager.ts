@@ -1,5 +1,6 @@
 "use client";
 
+import { useFrame } from "@react-three/fiber";
 import gsap from "gsap";
 import { useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
@@ -118,4 +119,24 @@ export function useCameraManager({
       onUpdate: () => cam.updateProjectionMatrix(),
     });
   }, [targetPosition, targetQuaternion, zoom, camera]);
+
+  // Canvas runs frameloop="demand" — these three tweens mutate the camera
+  // directly (position/quaternion/zoom), outside React and outside any
+  // useFrame of their own, so nothing tells R3F a new frame is needed while
+  // they're in flight. gsap.isTweening lets this stop invalidating the
+  // instant all three finish, instead of invalidating unconditionally
+  // forever (which would defeat frameloop="demand" entirely, since
+  // CameraManager is always mounted).
+  useFrame(({ invalidate }) => {
+    const cam = camera.current;
+    if (!cam) return;
+
+    if (
+      gsap.isTweening(cam.position) ||
+      gsap.isTweening(cam) ||
+      gsap.isTweening(quaternionProgressRef.current)
+    ) {
+      invalidate();
+    }
+  });
 }

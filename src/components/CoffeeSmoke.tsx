@@ -104,10 +104,23 @@ export function CoffeeSmoke() {
     }
   }, [perlinTexture]);
 
-  useFrame(({ clock }) => {
+  const frameParityRef = useRef(0);
+
+  useFrame(({ clock, invalidate }) => {
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = clock.getElapsedTime();
     }
+
+    // Canvas runs frameloop="demand" — this is the one thing on screen that
+    // truly never stops moving, so left unthrottled it would invalidate
+    // every frame forever and the whole point of "demand" is lost (the full
+    // scene re-renders whenever anything invalidates, not just this mesh).
+    // uTime above is still set from real elapsed time regardless, so
+    // rendering every other frame (~30fps) only lowers this slow, blurry
+    // noise plane's own smoothness — imperceptible — while halving the
+    // idle-state render rate for the rest of the scene.
+    frameParityRef.current = (frameParityRef.current + 1) % 2;
+    if (frameParityRef.current === 0) invalidate();
   });
 
   return (
