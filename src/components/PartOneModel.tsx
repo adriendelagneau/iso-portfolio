@@ -70,7 +70,7 @@ export function PartOneModel(props: JSX.IntrinsicElements["group"]) {
   const mRef = useRef<THREE.Mesh>(null);
   const secRef = useRef<THREE.Mesh>(null);
 
-  useFrame(() => {
+  useFrame(({ invalidate }) => {
     const date = new Date();
     const h = date.getHours() % 12;
     const m = date.getMinutes();
@@ -79,6 +79,11 @@ export function PartOneModel(props: JSX.IntrinsicElements["group"]) {
     if (hRef.current) hRef.current.rotation.y = (h + m / 60) * (Math.PI / 6);
     if (mRef.current) mRef.current.rotation.y = (m + s / 60) * (Math.PI / 30);
     if (secRef.current) secRef.current.rotation.y = s * (Math.PI / 30);
+
+    // Canvas runs frameloop="demand" — the second hand's motion is driven by
+    // real elapsed time (millisecond-precision sweep, not a per-second tick),
+    // so it needs a render every frame, always, same as before this switch.
+    invalidate();
   });
 
   return (

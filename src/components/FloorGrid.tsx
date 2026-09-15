@@ -250,7 +250,7 @@ export function FloorGrid() {
     return cellDiamondPoints(cellU, cellV);
   }, [hoveredCell]);
 
-  useFrame((_, delta) => {
+  useFrame(({ invalidate }, delta) => {
     const material = lineRef.current?.material as { opacity: number } | undefined;
     if (!material) return;
 
@@ -258,6 +258,13 @@ export function FloorGrid() {
     const targetOpacity = hoveredCell ? 1 : 0;
     opacityRef.current += (targetOpacity - opacityRef.current) * lerpSpeed;
     material.opacity = opacityRef.current;
+
+    // Canvas runs frameloop="demand" — only keep rendering while the
+    // highlight is actually fading in/out; once settled at rest (0 or 1)
+    // there's nothing left to animate.
+    if (Math.abs(targetOpacity - opacityRef.current) > 0.001) {
+      invalidate();
+    }
   });
 
   return (

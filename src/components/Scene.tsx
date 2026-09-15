@@ -44,7 +44,7 @@ export default function Scene() {
   const introZoom = introSettings.find((s) => s.name === "IntroView")!.desktop.zoom;
 
   return (
-    <Canvas shadows flat gl={{ preserveDrawingBuffer: true }}>
+    <Canvas shadows flat frameloop="demand" gl={{ preserveDrawingBuffer: true }}>
       <OrthographicCamera
         ref={cameraRef}
         makeDefault
