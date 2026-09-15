@@ -301,21 +301,24 @@ export const interactiveObjects: InteractiveObject[] = [
       },
     ],
   },
-  {
-    name: "Clock",
-    ...customDeviceTransformsQuat([-4, 8.56, -1.47], [-0.00157, 0.726386, 0, 0.687284], 190, {
-      // Hand-tuned live via CameraGUI at 1100x800 — position matched the
-      // earlier dummy guess exactly; only zoom needed a real value
-      // (179.5 vs. the guessed 160).
-      tablet: { position: [-3.6, 8.56, -1.3], zoom: 179.5 },
-      // Hand-tuned live via CameraGUI at 390x844 (iPhone 12 Pro) —
-      // position matched the earlier dummy guess exactly; only zoom
-      // needed a real value (129.5 vs. the guessed 130).
-      mobile: { position: [-3.2, 8.6, -1.1], zoom: 129.5 },
-    }),
-    title: "Horloge",
-    text: "Placeholder copy — a short note about timing, process, or whatever this corner is meant to represent.",
-  },
+  // Clock is no longer an interactive hotspot — neutralized alongside its
+  // HitBoxTrigger (HitBoxes.tsx) and Sidebar entry (Sidebar.tsx), not
+  // removed: this framing data is still valid if it ever comes back.
+  // {
+  //   name: "Clock",
+  //   ...customDeviceTransformsQuat([-4, 8.56, -1.47], [-0.00157, 0.726386, 0, 0.687284], 190, {
+  //     // Hand-tuned live via CameraGUI at 1100x800 — position matched the
+  //     // earlier dummy guess exactly; only zoom needed a real value
+  //     // (179.5 vs. the guessed 160).
+  //     tablet: { position: [-3.6, 8.56, -1.3], zoom: 179.5 },
+  //     // Hand-tuned live via CameraGUI at 390x844 (iPhone 12 Pro) —
+  //     // position matched the earlier dummy guess exactly; only zoom
+  //     // needed a real value (129.5 vs. the guessed 130).
+  //     mobile: { position: [-3.2, 8.6, -1.1], zoom: 129.5 },
+  //   }),
+  //   title: "Horloge",
+  //   text: "Placeholder copy — a short note about timing, process, or whatever this corner is meant to represent.",
+  // },
   {
     name: "Particles",
     ...customDeviceTransforms([5, 10, 4.861888696806017], [-1.8, 1.44, 0.3], 203, {

@@ -4,7 +4,9 @@ import { X } from "lucide-react";
 import { interactiveObjects } from "@/data/interactiveObjects";
 import useInteractionStore from "@/store/useInteractionStore";
 import { useResponsiveStore } from "@/store/useResponsiveStore";
-import { SidebarClock } from "./SidebarClock";
+// Clock is no longer an interactive hotspot — neutralized alongside its
+// HitBoxTrigger (HitBoxes.tsx) and data entry (interactiveObjects.ts).
+// import { SidebarClock } from "./SidebarClock";
 import { SidebarContact } from "./SidebarContact";
 import { SidebarLibrary } from "./SidebarLibrary";
 import { SidebarParticles } from "./SidebarParticles";
@@ -45,7 +47,7 @@ export function Sidebar() {
             <X className={size.closeIcon} />
           </button>
           {activeObject.name === "Library" && <SidebarLibrary object={activeObject} />}
-          {activeObject.name === "Clock" && <SidebarClock object={activeObject} />}
+          {/* {activeObject.name === "Clock" && <SidebarClock object={activeObject} />} */}
           {activeObject.name === "Particles" && <SidebarParticles object={activeObject} />}
           {activeObject.name === "Contact" && <SidebarContact object={activeObject} />}
           {activeObject.name === "Photos" && <SidebarPhotos object={activeObject} />}
