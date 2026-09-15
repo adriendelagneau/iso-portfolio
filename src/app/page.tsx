@@ -9,7 +9,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen">
+    <div className="h-dvh w-screen">
       <Loader />
       <Scene />
       <NavPad />
