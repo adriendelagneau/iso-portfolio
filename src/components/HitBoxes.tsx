@@ -104,6 +104,7 @@ function HitBoxTrigger({
         position={boxPosition}
         rotation={boxRotation}
         scale={boxScale}
+        userData={{ hitboxName: name }}
         onPointerOver={(event: ThreeEvent<PointerEvent>) => {
           event.stopPropagation();
           setHoveredObject(name);
