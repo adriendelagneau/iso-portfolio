@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Page introuvable — devwork5600",
+  title: "Page introuvable — Adrien Delagneau",
 };
 
 export default function NotFound() {

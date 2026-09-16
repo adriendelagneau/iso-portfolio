@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = "https://adrien-delagneau.fr";
-const TITLE = "devwork5600 — Portfolio 3D";
-const DESCRIPTION = "Portfolio 3D interactif présentant mes projets, compétences et coordonnées.";
+const TITLE = "Adrien Delagneau — Portfolio 3D";
+const DESCRIPTION =
+  "Portfolio 3D interactif d'Adrien Delagneau, développeur front-end — projets, compétences et coordonnées.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
