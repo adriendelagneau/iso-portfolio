@@ -70,7 +70,20 @@ export function RoomParallax({ children }: { children: ReactNode }) {
     // lerp hasn't visually settled yet (pointer moving or easing back to
     // neutral on focus). An exact 0 is asymptotically unreachable, hence
     // the epsilon; below it the remaining drift is sub-pixel.
-    const EPS = 0.0001;
+    //
+    // EPS must stay tiny relative to targetYaw/targetPitch's own scale
+    // (pointer * ~0.012-0.018), not just "small" in absolute terms — an
+    // earlier 0.0001 was actually comparable to targetYaw itself whenever
+    // pointer.x sat within about +/-0.0026 of 0 (screen-horizontal center),
+    // since targetYaw there is only ~3.8e-5. That read as "already
+    // converged" and stopped invalidating while the mouse was still
+    // actively crossing that band, so movement through screen-center
+    // (pointer.x's own zero) got silently dropped and only caught up once
+    // the mouse cleared the band — a visible stutter on X specifically
+    // (targetPitch's larger 0.018 coefficient made the equivalent band on Y
+    // narrower and less noticeable). 1e-6 shrinks that dead band to a
+    // fraction of a screen pixel, effectively eliminating it.
+    const EPS = 0.000001;
     if (Math.abs(yaw.current - targetYaw) > EPS || Math.abs(pitch.current - targetPitch) > EPS) {
       invalidate();
     }
