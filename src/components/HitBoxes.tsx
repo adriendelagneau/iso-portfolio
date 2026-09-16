@@ -142,6 +142,10 @@ export function HitBoxes(props: JSX.IntrinsicElements["group"]) {
 
   return (
     <group {...props} dispose={null}>
+      {/* Clock is no longer an interactive hotspot — it's decorative only
+          (still animated/time-accurate, see PartOneModel.tsx), not a NavPad
+          item, not selectable. Neutralized, not removed: geometry/props are
+          still valid if this ever needs to come back.
       <HitBoxTrigger
         name="Clock"
         boxGeometry={nodes.Cube002.geometry}
@@ -152,7 +156,7 @@ export function HitBoxes(props: JSX.IntrinsicElements["group"]) {
         cornersScale={1}
         hitBoxMaterial={hitBoxMaterial}
         cornersMaterial={cornersMaterial}
-      />
+      /> */}
       <HitBoxTrigger
         name="Photos"
         boxGeometry={nodes.Cube012.geometry}
