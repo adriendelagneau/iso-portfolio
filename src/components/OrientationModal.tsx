@@ -43,9 +43,11 @@ export function OrientationModal({ onPortraitChange }: OrientationModalProps) {
         showModal ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
-      <h1 className="mb-4 text-2xl font-bold md:text-4xl">
+      {/* Transient UI instruction, not page content — not a heading. The
+          page's real <h1> lives in page.tsx (visually hidden, sr-only). */}
+      <p className="mb-4 text-2xl font-bold md:text-4xl">
         Veuillez tourner votre appareil en mode paysage
-      </h1>
+      </p>
       <p className="text-lg md:text-xl">L&apos;expérience est optimisée pour le mode paysage.</p>
     </div>
   );
