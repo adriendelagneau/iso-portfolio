@@ -1,6 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -52,6 +53,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         {children}
+        <Link
+          href="/mentions-legales"
+          className="text-foreground/30 hover:text-foreground/70 fixed bottom-2 left-2 z-50 text-[10px] transition-colors"
+        >
+          Mentions légales
+        </Link>
         <Analytics />
       </body>
     </html>
