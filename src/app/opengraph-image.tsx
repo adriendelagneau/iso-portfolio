@@ -35,7 +35,7 @@ export default function OpengraphImage() {
       >
         A
       </div>
-      <div style={{ display: "flex", fontSize: 64, fontWeight: 700 }}>devwork5600</div>
+      <div style={{ display: "flex", fontSize: 64, fontWeight: 700 }}>Adrien Delagneau</div>
       <div style={{ display: "flex", fontSize: 32, opacity: 0.85, marginTop: 16 }}>
         Portfolio 3D interactif
       </div>

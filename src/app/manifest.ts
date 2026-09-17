@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "devwork5600 — Portfolio 3D",
-    short_name: "devwork5600",
+    name: "Adrien Delagneau — Portfolio 3D",
+    short_name: "Adrien Delagneau",
     description: "Portfolio 3D interactif présentant mes projets, compétences et coordonnées.",
     start_url: "/",
     display: "standalone",
